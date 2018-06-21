@@ -40,17 +40,16 @@ public class Main {
         //Point arrayPoint= new Point();
 
 
+        Player1_fleet = makeFleet();        // Make the fleet early so that we can easily get and print the fleet size in the intro text.
+        Player2_fleet = makeFleet();
 
-
-
-        System.out.println("Each player has a fleet of 5 ships.  Ship sizes are matched.");
+        System.out.println("Each player has a fleet of " + Player1_fleet.length + " ships.  Ship sizes are matched.");
         System.out.println("Your opponent's fleet is in a battle zone that is " + gridSizeDefault + " rows by " + gridSizeDefault + " columns.");
         System.out.println();
 
         // ==========  Set up the battle zone for Player2 ==============
 
         battleZone Player2_BattleZone = new battleZone(gridSizeDefault,gridSizeDefault);       // Instantiate and allocate battle zone for computer's ships.  Modify size by changing the number of rows and columns.
-        Player2_fleet = makeFleet();
 
         System.out.println("Randomly placing your opponent's ships in the opponent's battle zone of " + gridSizeDefault + " rows by " + gridSizeDefault + " columns ...");
         Player2_BattleZone.placeAllShipsRandomly(Player2_fleet);
@@ -80,7 +79,6 @@ public class Main {
 
         battleZone Player1_BattleZone = new battleZone(gridSizeRows,gridSizeColumns);          // Instantiate and allocate battle zone for human's ships.  Modify size by changing the number of rows and columns.
         EnemyFleetIntel Player1_EnemyFleetIntel = new EnemyFleetIntel(gridSizeDefault,gridSizeDefault);       // Instantiate and allocate enemy fleet intel class for Player1 (human).  Must be same size as the opponent's battle zone.
-        Player1_fleet = makeFleet();
 
         // ==========  Set up enemy ships list for both players ==============
         // The list is used by the computer algorithm (Player2).  Although not exposed to the human player (Player1), the list is referenced in ancillary methods so must be defined for the human player as well.
