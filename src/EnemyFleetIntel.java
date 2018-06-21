@@ -39,17 +39,17 @@ public class EnemyFleetIntel {
 
 
 
-    public void displayAllEnemyCells(String displayMargin) {
+    public void displayAllEnemyCells(String displayMargin, String gridHeadingMsg) {
         // 5/12: Remove passed arg "owner".  By creating two distinct classes (EnemyFleetIntel vs. battleZone) we don't need to identify "owner" in a single class.
         System.out.println(displayMargin);
-        System.out.println(displayMargin + "View of your opponent's fleet:");
+        System.out.println(displayMargin + gridHeadingMsg);
         System.out.println(displayMargin);
         System.out.println(displayMargin + "        COLUMN");
         System.out.print(displayMargin + "        ");
         for (int j=1;j<=gridWidth;j++) {                                // Print column headers
             System.out.print(j + "          ");
         }
-        System.out.println(displayMargin);
+        System.out.println();
         System.out.println(displayMargin + "ROW");
 
         for (int i = 0; i <= this.arrayIndex(gridHeight); i++) {
@@ -167,9 +167,9 @@ public class EnemyFleetIntel {
             //System.out.println("length north = " + segLength);
 
         } else {
-            System.out.println(displayMargin +"OK ... I'll choose a random cell.");
-
             gridIndexPair = evaluateIntelRandom ();
+            System.out.println(displayMargin +"OK ... I'll choose a random cell: (" + gridIndexPair.getRowIndex() + "," + gridIndexPair.getColumnIndex() + ")");
+
 
         }
 
@@ -302,8 +302,9 @@ public class EnemyFleetIntel {
                 targetCellIndex.putRowIndex(untestedCellIndex.getRowIndex());        // Assign the last discovered adjacent, untested cell as the target cell.
                 targetCellIndex.putColumnIndex(untestedCellIndex.getColumnIndex());
             } else {                // Couldn't find any adjacent, untested cells!!  (This is an abnormal condition)
-                System.out.println(displayMargin +"Hmmm ... I couldn't find any adjacent, untested cells.  (Very strange!)  I'll randomly pick a cell.");
                 targetCellIndex = evaluateIntelRandom ();
+                System.out.println(displayMargin +"Hmmm ... I couldn't find any adjacent, untested cells.  (Very strange!)  I'll randomly pick a cell: (" + targetCellIndex.getRowIndex() + "," + targetCellIndex.getColumnIndex() + ")");
+
             }
         }
         // System.out.println("***   searchDirection of attacked cell: " + this.gridCellArray[arrayIndex(targetCellIndex.getRowIndex())][arrayIndex(targetCellIndex.getColumnIndex())].searchDirection);

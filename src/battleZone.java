@@ -30,10 +30,10 @@ public class battleZone {
 
 
 
-    public void displayAllFriendlyCells(String displayMargin) {     // displayMargin contains a string that differentiates among players
+    public void displayAllFriendlyCells(String displayMargin, String gridHeaderMsg) {     // displayMargin contains a string that differentiates among players
         // 5/12: Remove passed arg "owner".  By creating two distinct classes (EnemyFleetIntel vs. battleZone) we don't need to identify "owner" in a single class.
         System.out.println(displayMargin);
-        System.out.println(displayMargin + "View of your fleet.  Upper-case letters are ship IDs:");
+        System.out.println(displayMargin + gridHeaderMsg);
         System.out.println(displayMargin);
         System.out.println(displayMargin + "        COLUMN");
         System.out.print(displayMargin + "        ");

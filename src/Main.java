@@ -58,7 +58,7 @@ public class Main {
         // ==========  Get game parameters for Player1  =================
 
         System.out.println("The default game is that both players have the same size battle zone.");
-        System.out.println("However, you can modify the size of the battle zone that contains your fleet.");
+        //System.out.println("However, you can modify the size of the battle zone that contains your fleet.");
         if (getYesNoInput("Do you want to change the size of the battle zone that contains your fleet? (y/n):")) {
             System.out.println("OK.  Choose your battle zone size, each dimension at least " + gridSizeMin + " but not more than " + gridSizeMax + ".");
             System.out.println();
@@ -91,6 +91,7 @@ public class Main {
 
 
         System.out.println("The computer can randomly place your ships in your zone, or you can place each ship manually.");
+        System.out.println("The computer player cannot see your ship placements, but during the game will deduce their locations from hits and misses.");
         if (getYesNoInput("Do you want to place your ships manually? (y/n):")) {
             System.out.println();
             System.out.println("OK. For each ship, indicate an ORIGIN and a DIRECTION.");
@@ -107,7 +108,7 @@ public class Main {
                     indexPair shipOrigin = new indexPair (playerInputRow,playerInputColumn);
                     success = Player1_BattleZone.placeShip (shipOrigin,  Player1_fleet[i].shipLength, playerInputDirection, Player1_fleet[i].shipName, verbose);
                 }
-                Player1_BattleZone.displayAllFriendlyCells(displayMarginPlayer1);
+                Player1_BattleZone.displayAllFriendlyCells(displayMarginPlayer1, "View of your fleet after placing ship " + Player1_fleet[i].shipName );
             }
 
         } else {                        // Computer places human's ships automatically (and randomly)
@@ -120,7 +121,7 @@ public class Main {
         promptToContinue("Enter to continue ...");
         System.out.println();
 
-        Player1_BattleZone.displayAllFriendlyCells(displayMarginPlayer1);
+        Player1_BattleZone.displayAllFriendlyCells(displayMarginPlayer1, "View of your fleet.  Letters are ship IDs.");
 
         System.out.println();
         promptToContinue("Enter to continue ...");
@@ -151,10 +152,10 @@ public class Main {
 
             System.out.println(displayMarginPlayer1);
             System.out.println(displayMarginPlayer1);
-            System.out.println(displayMarginPlayer1 + "YOUR TURN ...");
+            System.out.println(displayMarginPlayer1 + "************ YOUR TURN ... ************");
             System.out.println(displayMarginPlayer1);
 
-            Player1_EnemyFleetIntel.displayAllEnemyCells(displayMarginPlayer1);
+            Player1_EnemyFleetIntel.displayAllEnemyCells(displayMarginPlayer1, "What you know of your opponent's fleet:");
 
             playerInputRow = getRowIntInput("Type the row to attack: ", gridSizeDefault);
             //System.out.println(playerInputRow);
@@ -173,7 +174,7 @@ public class Main {
             gameOver = attackResult[2];
             //System.out.println(String.valueOf(attackResult[0]) + String.valueOf(attackResult[1]) + String.valueOf(attackResult[2]));
             Player1_EnemyFleetIntel.updateIntel(attackGridIndex,attackResult);
-            Player1_EnemyFleetIntel.displayAllEnemyCells(displayMarginPlayer1);
+            Player1_EnemyFleetIntel.displayAllEnemyCells(displayMarginPlayer1, "Your enemy's fleet after the attack:");
             if (gameOver) {
                 System.out.println();
                 System.out.println();
@@ -193,7 +194,11 @@ public class Main {
 
                 System.out.println();
                 System.out.println(displayMarginPlayer2);
-                System.out.println(displayMarginPlayer2 + "OPPONENT'S TURN ...");
+                System.out.println(displayMarginPlayer2 + "************ OPPONENT'S TURN ... ***********");
+                System.out.println(displayMarginPlayer2);
+                System.out.println(displayMarginPlayer2);
+                //System.out.println(displayMarginPlayer2 + "What I know about your fleet:");
+                Player2_EnemyFleetIntel.displayAllEnemyCells(displayMarginPlayer2, "What I know about your fleet:");
                 System.out.println(displayMarginPlayer2);
                 attackGridIndex = Player2_EnemyFleetIntel.evaluateIntelEnhanced(displayMarginPlayer2);
                 //System.out.println(displayMarginPlayer2 + "Intel Eval:" + attackGridIndex.getRowIndex());
@@ -212,8 +217,9 @@ public class Main {
                         Player2_EnemyFleetIntel.markEnemyShipSunk(sunkShipLength);                                                         //
                     }
 
-                    // Player2_EnemyFleetIntel.displayAllEnemyCells(displayMarginPlayer2);
-                    Player1_BattleZone.displayAllFriendlyCells("");
+                    promptToContinue("Enter to continue ...");
+
+                    Player1_BattleZone.displayAllFriendlyCells("", "Your fleet after the attack:");
                     System.out.println();
                     promptToContinue("Enter to continue ...");
                 } else {
