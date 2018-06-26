@@ -174,7 +174,7 @@ public class Main {
             gameOver = attackResult[2];
             //System.out.println(String.valueOf(attackResult[0]) + String.valueOf(attackResult[1]) + String.valueOf(attackResult[2]));
             Player1_EnemyFleetIntel.updateIntel(attackGridIndex,attackResult);
-            Player1_EnemyFleetIntel.displayAllEnemyCells(displayMarginPlayer1, "Your enemy's fleet after the attack:");
+            Player1_EnemyFleetIntel.displayAllEnemyCells(displayMarginPlayer1, "Your opponent's fleet after the attack:");
             if (gameOver) {
                 System.out.println();
                 System.out.println();

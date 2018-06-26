@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="89b8d113-5a05-4501-a926-bfcb38a85e27" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/EnemyFleetIntel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EnemyFleetIntel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/battleZone.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/battleZone.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -92,8 +90,8 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="218">
-              <caret line="154" column="94" selection-start-line="154" selection-start-column="94" selection-end-line="154" selection-end-column="94" />
+            <state relative-caret-position="143">
+              <caret line="176" column="93" selection-start-line="176" selection-start-column="93" selection-end-line="176" selection-end-column="93" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -120,27 +118,27 @@
       <find>enemyshipslist</find>
       <find>Look</find>
       <find>existsadjacent</find>
-      <find />
-      <find />
+      <find>place ship</find>
+      <find>Place ship</find>
       <find>randomly</find>
       <find>enemyshipslist.size</find>
-      <find />
-      <find />
+      <find>for each</find>
+      <find>random grid inex</find>
       <find>gridindexisvalid</find>
       <find>gridindexis</find>
       <find>gridindex</find>
-      <find />
-      <find />
+      <find>hit but not sunk</find>
+      <find>which is no</find>
       <find>attackgridindex</find>
       <find>attackgrid</find>
       <find>shortest</find>
-      <find />
-      <find />
+      <find>random grid</find>
+      <find>direction =</find>
       <find>System.out</find>
       <find>random</find>
       <find>displayAllEnemyCells</find>
       <find>displayAllFriendlyCells</find>
-      <find />
+      <find>what I know</find>
       <find>displayall</find>
     </findStrings>
     <replaceStrings>
@@ -177,7 +175,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
+  <component name="ProjectFrameBounds">
     <option name="x" value="150" />
     <option name="y" value="51" />
     <option name="width" value="1294" />
@@ -307,7 +305,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="150" y="51" width="1294" height="949" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -318,7 +315,7 @@
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.4892857" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.64761907" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
@@ -666,8 +663,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="154" column="94" selection-start-line="154" selection-start-column="94" selection-end-line="154" selection-end-column="94" />
+        <state relative-caret-position="143">
+          <caret line="176" column="93" selection-start-line="176" selection-start-column="93" selection-end-line="176" selection-end-column="93" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
