@@ -9,39 +9,33 @@ public class Main {
     // public static final ship[] Player1_fleet = ;
 
     public static void main(String[] args) {
+
+        int gridSizeMin = 5;                                            // Min grid size (rows or columns)  NOTE: Must be LTE gridSizeDefault
+        int gridSizeMax = 12;                                           // Max grid size (rows or columns)
+        int gridSizeDefault = 5;                                        // Default grid size (rows and columns).  Computer player's grid size.  Cannot be changed during game setup or game play.  RESTRICTION:  Must be in range of gridSizeMin and gridSizeMax
+        int gridSizeRows = 5;                                           // Human player's grid size (rows).  Can be modified by human player during game setup.  RESTRICTION:  Must be in range of gridSizeMin and gridSizeMax
+        int gridSizeColumns = 5;                                        // Human player's grid size (columns).  Can be modified by human player during game setup.  RESTRICTION:  Must be in range of gridSizeMin and gridSizeMax
+        int round = 0;
+        boolean gameOver = false;
+        String displayMarginPlayer1 = "";                               // Displayed on left side of output when human player playes. Passed on displayAllFriendlyCells
+        String displayMarginPlayer2 = "***   ";                         // Displayed on left side of output when computer player playes. Passed on displayAllFriendlyCells
+        ship[] Player1_fleet;                                           // The ships that Player1 controls.  Player1 fleet is public b/c it is used by Player2 (the computer) to create a separate list for tracking ships
+        ship[] Player2_fleet;                                           // The ships that Player2 controls. In the current implementation, Player1 and Player2 have the same number and size ships.
+        int playerInputRow = 0;                                         // The row # that the human player wants to attack.  Updated every time the human plays.
+        int playerInputColumn = 0;                                      // The column # that the human player wants to attack. Updated every time the human plays.
+        indexPair attackGridIndex = new indexPair (0,0);   // Variable for the grid to attack as determined by evaluateIntel
+        boolean [] attackResult = new boolean [3];                      // Instantiate and allocate a result for the attack method (test a cell for existence of an opponent's ship)
+
+
+        Player1_fleet = makeFleet();        // Make the fleet early so that we can easily get and print the fleet size in the intro text.
+        Player2_fleet = makeFleet();
+
         System.out.println();
         System.out.println("BATTLESHIP!");
         System.out.println();
         System.out.println("You play against the computer.");
         System.out.println();
 
-        int gridSizeMin = 5;                                            // Min grid size (rows or columns)
-        int gridSizeMax = 12;                                           // Max grid size (rows or columns)
-        int gridSizeDefault = 5;                                        // Default grid size (rows and columns)
-        int gridSizeRows = 5;                                           // Human player's grid size (rows).  Can be modified by human player.
-        int gridSizeColumns = 5;                                // Human player's grid size (columns).  Can be modified by human player.
-        int round = 0;
-        boolean gameOver = false;
-        String displayMarginPlayer1 = "";                                // Pass on displayAllFriendlyCells
-        String displayMarginPlayer2 = "***   ";
-        //String yesNoInput = "";                                                     // Used to get human player input for "yes" "no" questions
-        ship[] Player1_fleet;                                                // The ships that Player1 controls.  Player1 fleet is public b/c it is used by Player2 (the computer) to create a separate list for tracking ships
-        ship[] Player2_fleet;                                                       // The ships that Player2 controls. In the current implementation, Player1 and Player2 have the same number and size ships.
-        int playerInputTotalRows = 0;                                               // If player wants to customize the size of the battle zone
-        int playerInputTotalColumns = 0;                                            // If player wants to customize the size of the battle zone
-        int playerInputRow = 0;                                                     // The row # that the human player wants to attack.  Updated every time the human plays.
-        int playerInputColumn = 0;                                                  // The column # that the human player wants to attack. Updated every time the human plays.
-        indexPair attackGridIndex = new indexPair (0,0);             // Variable for the grid to attack as determined by evaluateIntel
-        // Scanner sc = new Scanner(System.in);
-        boolean [] attackResult = new boolean [3];                                // Instantiate and allocate a result for the "test" method (test a cell for existence of an opponent's ship)
-        //String resultString;  not used .......
-        //int[] indexPair = new int[2];
-        //Point gridPoint = new Point();
-        //Point arrayPoint= new Point();
-
-
-        Player1_fleet = makeFleet();        // Make the fleet early so that we can easily get and print the fleet size in the intro text.
-        Player2_fleet = makeFleet();
 
         System.out.println("Each player has a fleet of " + Player1_fleet.length + " ships.  Ship sizes are matched.");
         System.out.println("Your opponent's fleet is in a battle zone that is " + gridSizeDefault + " rows by " + gridSizeDefault + " columns.");
@@ -104,9 +98,14 @@ public class Main {
                     System.out.println("Place ship " + Player1_fleet[i].shipName + ", length=" + Player1_fleet[i].shipLength + " in a grid that is " + gridSizeDefault + " by " + gridSizeDefault + ":");
                     playerInputRow = getRowIntInput("    Origin row: ", gridSizeRows);
                     playerInputColumn = getColumnIntInput("    Origin column: ", gridSizeColumns);
-                    int playerInputDirection = getDirectionIntInput("    Direction: 0=North, 1=East, 2=South, 3=West: ");
-                    indexPair shipOrigin = new indexPair (playerInputRow,playerInputColumn);
-                    success = Player1_BattleZone.placeShip (shipOrigin,  Player1_fleet[i].shipLength, playerInputDirection, Player1_fleet[i].shipName, verbose);
+                    // System.out.println("Player1_BattleZone.gridCellArray[playerInputRow][playerInputColumn].hasShip = " + Player1_BattleZone.gridCellArray[playerInputRow-1][playerInputColumn-1].hasShip);
+                    if (Player1_BattleZone.gridCellArray[playerInputRow-1][playerInputColumn-1].hasShip == true) {
+                        System.out.println("Another ship already occupies (" + playerInputRow + "," + playerInputColumn + ").");
+                    } else {
+                        int playerInputDirection = getDirectionIntInput("    Direction: 0=North, 1=East, 2=South, 3=West: ");
+                        indexPair shipOrigin = new indexPair(playerInputRow, playerInputColumn);
+                        success = Player1_BattleZone.placeShip(shipOrigin, Player1_fleet[i].shipLength, playerInputDirection, Player1_fleet[i].shipName, verbose);
+                    }
                 }
                 Player1_BattleZone.displayAllFriendlyCells(displayMarginPlayer1, "View of your fleet after placing ship " + Player1_fleet[i].shipName );
             }

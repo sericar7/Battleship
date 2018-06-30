@@ -330,12 +330,14 @@ public class EnemyFleetIntel {
             //System.out.println("Random grid index: " + randomGridRowIndex + "  " + randomGridColumnIndex);
             if (!wasPreviouslyAttacked(randomGridRowIndex,randomGridColumnIndex)) {
                 boolean foundSpaceForAShip = false;
+
                 for (int direction = 0; direction <= 3 & !foundSpaceForAShip; direction++) {
+                    //System.out.println("direction, shortestUnsunkShipLength, randomCell " + direction + " " + shortestUnsunkShipLength + " " + randomCell.getRowIndex() + randomCell.getColumnIndex());
                     if (existsAdjacentUntestedCells (direction, shortestUnsunkShipLength, randomCell)) {
                         foundSpaceForAShip = true;
                     }
                 }
-                if (foundSpaceForAShip = true) {
+                if (foundSpaceForAShip == true) {
                     newTarget=true;
                 }
             }
