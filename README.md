@@ -1,5 +1,6 @@
 # Battleship
-Battleship game that runs in a command window.  Java implementation.
+Battleship game that runs in a command window.  
+Java implementation.
 
 Summary:
 Battleship game for command line, implemented in Java.
@@ -15,7 +16,6 @@ To run the Java program:
       java -jar Battleship.jar
 
 The game runs only if your version of Java is compatible with mine.
-
 
 	  
 Defaults:
