@@ -284,7 +284,7 @@ public class Main {
     }
 
     public static ship[] makeFleet() {                         // This fleet matches the original Battleship game fleet.
-        ship ship1 = new ship("A",5);
+        ship ship1 = new ship("A",3);
         ship ship2 = new ship("B",4);
         //ship ship3 = new ship("C",3);
         //ship ship4 = new ship("D",3);

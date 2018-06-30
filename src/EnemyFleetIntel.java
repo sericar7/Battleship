@@ -143,48 +143,26 @@ public class EnemyFleetIntel {
     public indexPair evaluateIntelEnhanced (String displayMargin) {
 
         // Look for a ship section that is hit but unsunk. Look for targets adjacent to the hit but unsunk cell. (If no hit but unsunk cell exists, generate a random cell to attack).
-        // System.out.println("*** ---- evaluateIntelEnhanced ------");
 
         indexPair gridIndexPair = new indexPair (0,0);
-        //promptToContinue("Enter to continue 1 ...");
 
-        //boolean existsHitNotSunk = false;
-        if  (existsHitNotSunkCell()) {     //
-            //gridIndexPair = findHitNotSunk ();   // get an indexPair from the called function?
-            //indexPair gridIndexPair = new indexPair (3,2);
-            //promptToContinue("Enter to continue 2 ...");
-            // System.out.println("this.hitNotSunkCell() = " + this.getHitNotSunkCell().getRowIndex() + "," + this.getHitNotSunkCell().getColumnIndex());
-            //promptToContinue("Enter to continue 3 ...");
+        if  (existsHitNotSunkCell()) {
             gridIndexPair = findTargetNearHitNotSunkCell (this.getHitNotSunkCell(), displayMargin);
-            //promptToContinue("Enter to continue 4 ...");
-            //gridIndexPair = getHitNotSunkCell();
-            //System.out.println("hitNotSunk gridIndexPair = " + gridIndexPair.getRowIndex() + "," + gridIndexPair.getColumnIndex());
-            //int direction = 0;
-            //int length = 0;
-            //gridIndexPair.putRowIndex(3);
-            //gridIndexPair.putColumnIndex(3);
-            //int segLength = this.shipSectionSegmentLength (direction, length, gridIndexPair);
-            //System.out.println("length north = " + segLength);
-
         } else {
             gridIndexPair = evaluateIntelRandom ();
             System.out.println(displayMargin +"OK ... I'll choose a random cell: (" + gridIndexPair.getRowIndex() + "," + gridIndexPair.getColumnIndex() + ")");
-
-
         }
-
-        // System.out.println("---- EXIT evaluateIntelEnhanced ------");
         return gridIndexPair;
     }
 
 
     public indexPair findTargetNearHitNotSunkCell (indexPair hitNotSunkCell, String displayMargin) {
 
-        indexPair candidateCellIndex = new indexPair (hitNotSunkCell.getRowIndex(),hitNotSunkCell.getColumnIndex());
+        indexPair candidateCellIndex = new indexPair (0,0);        //(hitNotSunkCell.getRowIndex(),hitNotSunkCell.getColumnIndex());
         indexPair untestedCellIndex = new indexPair (0,0);                      // Store coordinates of an adjacent, untested cell.  If two hitNotSunk sections are found in this orientation, this becomes the target.  If not, keep looking for a better target.
         indexPair targetCellIndex = new indexPair (0,0);                      // When an appropriate candidate is identified and ready to return to calling method, change the name from "candidate..." to "target...".
         boolean foundTarget = false;
-        boolean[] searchList = {false,false,false,false};
+        boolean[] searchList = {false,false,false,false};                                   // Keep track of the directions that have been searched (index 0 = north, index 1 = east, ...)
         boolean searchedAllDirections = false;
         //String directionText = "";                  // Text ("North","East","South","West") that corresponds to the integer representations (0,1,2,3).  Initialize to "North" and must align with the for loop.
         System.out.println(displayMargin);
@@ -202,31 +180,45 @@ public class EnemyFleetIntel {
                 boolean foundBothBoundaries = false;        // Becomes true when a second boundary is found in a given orientation (N+S, E+W).  Reset to false when trying a new direction.
                 boolean foundUntestedCell = false;          // Becomes true when an untested (not yet attacked) is found.  Reset when changing orientation (when foundBothBoundaries = true).
                 boolean multiSectionHitNotSunk = false;     // Becomes true when we find a HitNotSunk section adjacent to another HitNotSunkSection
+                boolean shortestUnsunkShipCanFit = true;    // Becomes false when a ship cannot fit over a given cell, in a given orientation (N-S, E-W)
                 int boundaryCount = 0;                      // Increment when a boundary is found.  When 2 boundaries are found in a given orientation, it's time to try another direction.
 
                 candidateCellIndex.putRowIndex(hitNotSunkCell.getRowIndex());            // Start searching from the previously hit (but not yet sunk) cell
                 candidateCellIndex.putColumnIndex(hitNotSunkCell.getColumnIndex());
 
-                while (foundTarget==false & foundBothBoundaries == false) {                                 // Search a direction.  If a boundary is found, search the opposite direction.)
-                    candidateCellIndex = candidateCellIndex.adjacent(searchDirection);                                             // Determine the index of the next cell in the direction of <searchDirection>
+                while (foundTarget==false & foundBothBoundaries == false & shortestUnsunkShipCanFit == true) {                                 // Search a direction.  If a boundary is found, search the opposite direction.)
+                    candidateCellIndex = candidateCellIndex.adjacent(searchDirection);                                // Determine the index of the next cell in the direction of <searchDirection>
 
                     System.out.println(displayMargin + "Look " + directionInt2Text(searchDirection) + "..."); // to cell (" + candidateCellIndex.getRowIndex() + "," + candidateCellIndex.getColumnIndex() + "):");
                     if (this.gridIndexIsValid(candidateCellIndex.getRowIndex(), candidateCellIndex.getColumnIndex())) {         // If the next cell is in the BattleZone ...
                         if (!wasPreviouslyAttacked(candidateCellIndex.getRowIndex(), candidateCellIndex.getColumnIndex())) {          // If this cell has not yet been attacked ...
-                            if (multiSectionHitNotSunk == true) {                                                                       // And is aligned with hitNotSunk sections,
-                                foundTarget = true;                                                                                         // This is a good target!
-                                targetCellIndex.putRowIndex(candidateCellIndex.getRowIndex());                                              // Assign this location as the target
-                                targetCellIndex.putColumnIndex(candidateCellIndex.getColumnIndex());
-                                this.gridCellArray[arrayIndex(targetCellIndex.getRowIndex())][arrayIndex(targetCellIndex.getColumnIndex())].searchDirection = searchDirection;  // Set the direction
-                                System.out.println(displayMargin +"(" + targetCellIndex.getRowIndex() + "," + targetCellIndex.getColumnIndex() + ") has not yet been attacked and is aligned with other sections that are hit but not sunk.");
-                            }  else {
-                                // candidateCellIndex marks a potential target.  Save the coordinates as untestedCellInces.  If we find nothing better, we can use it as the target.  But let's keep looking, if we haven't yet used all directions.
-                                untestedCellIndex = new indexPair(candidateCellIndex.getRowIndex(), candidateCellIndex.getColumnIndex());
-                                this.gridCellArray[arrayIndex(untestedCellIndex.getRowIndex())][arrayIndex(untestedCellIndex.getColumnIndex())].searchDirection = searchDirection;  // We might not attack this cell, but now is the time to set the direction.  Direction can be changed on a future search if this cell is not attacked on this turn.
-                                foundBoundary = true;                // An untested cell is a boundary of the current search effort.
-                                foundUntestedCell = true;
-                                System.out.println(displayMargin +"(" + untestedCellIndex.getRowIndex() + "," + untestedCellIndex.getColumnIndex() + ") has not yet been attacked.  I'll keep it in mind as a potential target. ");
+                            if (spaceForShip(searchDirection,candidateCellIndex) -1 + spaceForShip((searchDirection + 2) % 4,candidateCellIndex) >= findShortestUnsunkShipLength()) {
+                                // If the shortest unsunk ship can fit over this point and in this orientation (N-S, E-W) ....
+                                if (multiSectionHitNotSunk == true) {                                                                       // And is aligned with hitNotSunk sections,
+                                    foundTarget = true;                                                                                         // This is a good target!
+                                    targetCellIndex.putRowIndex(candidateCellIndex.getRowIndex());                                              // Assign this location as the target
+                                    targetCellIndex.putColumnIndex(candidateCellIndex.getColumnIndex());
+                                    this.gridCellArray[arrayIndex(targetCellIndex.getRowIndex())][arrayIndex(targetCellIndex.getColumnIndex())].searchDirection = searchDirection;  // Set the direction
+                                    System.out.println(displayMargin +"(" + targetCellIndex.getRowIndex() + "," + targetCellIndex.getColumnIndex() + ") has not yet been attacked and is aligned with other sections that are hit but not sunk.");
+                                }  else {
+                                    // candidateCellIndex marks a potential target.  Save the coordinates as untestedCellIndexes.  If we find nothing better, we can use it as the target.  But let's keep looking, if we haven't yet used all directions.
+                                    untestedCellIndex = new indexPair(candidateCellIndex.getRowIndex(), candidateCellIndex.getColumnIndex());
+                                    this.gridCellArray[arrayIndex(untestedCellIndex.getRowIndex())][arrayIndex(untestedCellIndex.getColumnIndex())].searchDirection = searchDirection;  // We might not attack this cell, but now is the time to set the direction.  Direction can be changed on a future search if this cell is not attacked on this turn.
+                                    foundBoundary = true;                // An untested cell is a boundary of the current search effort.
+                                    foundUntestedCell = true;
+                                    System.out.println(displayMargin +"(" + untestedCellIndex.getRowIndex() + "," + untestedCellIndex.getColumnIndex() + ") has not yet been attacked.  I'll keep it in mind as a potential target. ");
+                                }
+                            } else {
+                                shortestUnsunkShipCanFit = false;
+                                String orientationText = new String ();
+                                if (searchDirection == 0 | searchDirection == 2) {
+                                    orientationText = "north-south";
+                                } else {
+                                    orientationText = "east-west";
+                                }
+                                    System.out.println(displayMargin +"The shortest unsunk ship won't fit "+ orientationText + " over (" + candidateCellIndex.getRowIndex() + "," + candidateCellIndex.getColumnIndex() + ").");
                             }
+
                         } else {                        // Found a cell in the BattleZone that has been tested (has been attacked)
                             if (this.gridCellArray[arrayIndex(candidateCellIndex.getRowIndex())][arrayIndex(candidateCellIndex.getColumnIndex())].hasShip == true) {
                                 if (this.gridCellArray[arrayIndex(candidateCellIndex.getRowIndex())][arrayIndex(candidateCellIndex.getColumnIndex())].shipSunk == true) {
@@ -303,7 +295,7 @@ public class EnemyFleetIntel {
                 targetCellIndex.putColumnIndex(untestedCellIndex.getColumnIndex());
             } else {                // Couldn't find any adjacent, untested cells!!  (This is an abnormal condition)
                 targetCellIndex = evaluateIntelRandom ();
-                System.out.println(displayMargin +"Hmmm ... I couldn't find any adjacent, untested cells.  (Very strange!)  I'll randomly pick a cell: (" + targetCellIndex.getRowIndex() + "," + targetCellIndex.getColumnIndex() + ")");
+                System.out.println(displayMargin +"Hmmm ... I couldn't find an adjacent, suitable target.  (Very strange!)  I'll randomly pick a cell: (" + targetCellIndex.getRowIndex() + "," + targetCellIndex.getColumnIndex() + ")");
 
             }
         }
@@ -617,12 +609,14 @@ public class EnemyFleetIntel {
     }
 
 
-    public int shipSectionSegmentLength (int direction, int length, indexPair gridIndexPair) {
 
-        // How many adjacent hit but not sunk cells are there?
-        // Recursive calls; start by passing length = 0 (?)
 
-        //System.out.println("---- shipSectionSegmentLength ------");
+    public int spaceForShip (int direction, indexPair gridIndexPair) {
+
+        // How much SPACE is there for a ship from a given origin in a given direction (0=North, 1=East, 2=South, 3=West)?  Boundaries include the grid boundary, empty cells, and sunk ship cells
+
+
+        //System.out.println("---- spaceForShip ------");
 
         //System.out.println("length1 = " + length);
         //System.out.println("direction = " + direction);
@@ -630,49 +624,40 @@ public class EnemyFleetIntel {
         indexPair newGridIndexPair = new indexPair (gridIndexPair.getRowIndex(), gridIndexPair.getColumnIndex());       // Initialize the new index as the "old" index
         int i = arrayIndex(gridIndexPair.getRowIndex());
         int j = arrayIndex(gridIndexPair.getColumnIndex());
-        //System.out.println("i = " + i);
-        //System.out.println("j = " + j);
-        if (i>=0 & j>=0) {
-            //System.out.println("hasShip = " + this.gridCellArray[i][j].hasShip);
-            if (this.gridCellArray[i][j].hasShip) {
-                int segLength = length + 1;
-                //indexPair newGridIndexPair = new indexPair (gridIndexPair.getRowIndex() - 1, gridIndexPair.getColumnIndex());
+        int length = 0;                    // Start counter at 0 because the first time through the loop is for the origin point.  Count
+        boolean foundBoundary = false;
 
-                //System.out.println("length2 = " + segLength);
-                switch(direction)
-                {
-                    case 0 :        // direction = north
-                        newGridIndexPair.putRowIndex(gridIndexPair.getRowIndex() -1) ;         // Decrease the grid row index by 1 (move north)
-                        //System.out.println("direction = north");
-                        break;
-                    case 1 :        // direction = east
-                        newGridIndexPair.putColumnIndex(gridIndexPair.getColumnIndex() +1) ;   // Increase the grid column index by 1 (move east)
-                        //System.out.println("direction = east");
-                        break;
-                    case 2 :        // direction = south
-                        newGridIndexPair.putRowIndex(gridIndexPair.getRowIndex() +1) ;         // Increase the grid row index by 1 (move north)
-                        //System.out.println("direction = south");
-                        break;
-                    case 3 :        // direction = west
-                        newGridIndexPair.putColumnIndex(gridIndexPair.getColumnIndex() -1) ;   // Decrease the grid column index by 1 (move west)
-                        //System.out.println("direction = west");
-                        break;
-                    default :
-                        System.out.println("! Invalid direction");
-                }
-                return shipSectionSegmentLength (direction, segLength, newGridIndexPair);
+        while ( i >= 0 & i < gridHeight & j >= 0 & j < gridWidth & (!foundBoundary) ) {      // While on the grid...   (Indexes start at 0 and go up to gridHeight-1, gridWidth-1)
+            if (this.gridCellArray[i][j].attacked == false | (this.gridCellArray[i][j].hasShip == true & this.gridCellArray[i][j].shipSunk == false)) {  // If not yet attacked or (hit but not sunk)
+                length++;           // Increase the length
+
+                switch(direction)       // Move to the next adjacent cell in the same direction
+                    {
+                        case 0 :        // direction = north
+                            i = i - 1;  // Decrease the grid row index by 1 (move north)
+                            break;
+                        case 1 :        // direction = east
+                            j = j + 1;  // Increase the grid column index by 1 (move east)
+                            break;
+                        case 2 :        // direction = south
+                            i = i + 1;  // Increase the grid row index by 1 (move north)
+                            break;
+                        case 3 :        // direction = west
+                            j = j - 1;  // Decrease the grid column index by 1 (move west)
+                            break;
+                        default :
+                            System.out.println("! Invalid direction");
+                    }
+
             } else {
-                System.out.println("No ship: (" + gridIndexPair.getRowIndex() + "," + gridIndexPair.getColumnIndex() + ")" );
+                foundBoundary = true;
             }
-            //System.out.println("---- EXIT shipSectionSegmentLength ------");
-            return length;
-        }  else {               // Out of bounds
-            //System.out.println("---- EXIT shipSectionSegmentLength ------");
-            return length;
         }
-
-
+        // System.out.println("------- Space for ship: " + length);
+        return length;
     }
+
+
 
 
     public boolean existsAdjacentUntestedCells (int direction, int length, indexPair gridIndexPair) {
