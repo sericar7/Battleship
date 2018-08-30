@@ -27,10 +27,10 @@ Options:
 - During setup, player can manually place ships or have them placed randomly.
 - Very minor code changes in the Main.java file allow easy mods of the following attributes:
   - Default grid size			 			(modify constant gridSizeDefault)
-  - Min and max grid sizes 					(modify constants gridSizeMin and gridSizeMax) gridSizeDefault
+  - Min and max grid sizes 					(modify constants gridSizeMin and gridSizeMax) 
   - Number and size of ships in the fleet 	(modify ship names and sizes in the "makeFleet" method)
 
 
 Note: In the traditional (commercial) version of the game:
-- Each player's fleet includes 5 ships of 3 sizes: 5 cells, 4 cells, 3 cells (2#), 2 cells.
+- Each player's fleet includes 5 ships of 4 lengths: 5 cells, 4 cells, 3 cells (2#), 2 cells.
 - The battle zone (grid) is 10X10.
